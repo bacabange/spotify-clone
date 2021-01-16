@@ -1,12 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import './sass/index.scss';
 import reportWebVitals from './reportWebVitals';
+import { Router, Link } from "@reach/router";
+import { ThemeProvider } from 'styled-components';
+
+import Home from './pages/Home';
+import {theme} from './utils/theme'
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ThemeProvider theme={theme}>
+      <Router>
+        <Home path="/" />
+      </Router>
+    </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
