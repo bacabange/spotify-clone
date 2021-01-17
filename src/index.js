@@ -2,18 +2,22 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './sass/index.scss';
 import reportWebVitals from './reportWebVitals';
-import { Router, Link } from "@reach/router";
 import { ThemeProvider } from 'styled-components';
-
-import Home from './pages/Home';
 import {theme} from './utils/theme'
+
+import SongsState from './context/songs/SongsState';
+import AuthState from './context/auth/AuthState';
+import Routes from "./routes";
+
 
 ReactDOM.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <Router>
-        <Home path="/" />
-      </Router>
+      <AuthState>
+        <SongsState>
+          <Routes />
+        </SongsState>
+      </AuthState>
     </ThemeProvider>
   </React.StrictMode>,
   document.getElementById('root')
