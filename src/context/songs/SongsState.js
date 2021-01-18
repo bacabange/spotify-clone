@@ -1,47 +1,68 @@
 import React, { useReducer } from 'react';
-import axios from 'axios';
 import SongsContext from './songsContext';
 import SongsReducer from './songsReducer';
+import { get } from '../../utils/api';
+import queryString from 'query-string'
 
 
-const AuthState = props => {
+const SongState = props => {
   const initialState = {
     all: [],
-    loadingSongs: false,
+    isLoading: false,
+    query: null,
+    url: null,
+    pagination: {
+      total: 0,
+      next: null,
+      previous: null,
+      offset: 0,
+    }
   }
 
   const [state, dispatch] = useReducer(SongsReducer, initialState);
 
-  const getSongs = async () => {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-    };
+  const getSongs = async (query, externalURL = null) => {
+    dispatch({ type: 'set_query', query });
+    dispatch({ type: 'set_songs_loading', isLoading: true });
 
     try {
-      dispatch({ type: 'get_songs' });
+      const params = queryString.stringify({
+        query,
+        type: 'track',
+      })
+      let url = `https://api.spotify.com/v1/search?${params}`;
 
-      const res = await axios.get('https://corona.lmao.ninja/all', config);
+      if (externalURL) {
+        url = externalURL;
+      }
+
+      const result = await get(url);
+
+      console.log("🚀 ~ file: SongsState.js ~ line 21 ~ return ~ result", result)
 
       dispatch({
         type: 'get_songs_success',
-        payload: res.data,
+        data: result.tracks.items,
+        pagination: {
+          total: result.tracks.total,
+          next: result.tracks.next,
+          previous: result.tracks.previous,
+          offset: result.tracks.offset,
+        }
       });
-
     } catch (error) {
-      dispatch({
-        type: 'get_songs_fail',
-        payload: error.response.data,
-      });
+      // remove loading
+      dispatch({ type: 'get_songs_fail', error });
+      console.log('error', error);
     }
   }
 
   return <SongsContext.Provider
     value={{
       all: state.all,
-      loadingSongs: state.loadingSongs,
+      query: state.query,
+      pagination: state.pagination,
+      isLoading: state.isLoading,
       getSongs,
     }}
   >
@@ -49,4 +70,4 @@ const AuthState = props => {
   </SongsContext.Provider>;
 }
 
-export default AuthState;
+export default SongState;

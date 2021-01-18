@@ -3,7 +3,7 @@ import Header from '../components/Layout/Header'
 import Footer from '../components/Layout/Footer'
 import Container from '../components/Layout/Container'
 import Logo from '../components/Logo'
-import ProfileImage from '../components/ProfileImage'
+import ProfileSection from '../components/ProfileSection'
 import AuthContext from '../context/auth/authContext';
 import { navigate } from "@reach/router"
 
@@ -26,7 +26,7 @@ function Login() {
     <Container>
       <Header>
         <Logo>ESPOTIFAI</Logo>
-        <ProfileImage />
+        <ProfileSection />
       </Header>
 
       <section className="content">

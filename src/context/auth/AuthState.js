@@ -20,12 +20,19 @@ const AuthState = props => {
     dispatch({ type: 'login_fail', error });
   }
 
+
+  const logout = async () => {
+    localStorage.removeItem('access_token');
+    dispatch({ type: 'logout' });
+  }
+
   return <AuthContext.Provider
     value={{
       isAuth: state.isAuth,
       error: state.error,
       login,
-      loginFail
+      loginFail,
+      logout
     }}
   >
     {props.children}

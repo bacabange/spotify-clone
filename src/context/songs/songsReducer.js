@@ -2,22 +2,28 @@
 const songsReducer = (state, action) => {
   switch (action.type) {
     // Global
-    case 'get_songs':
+    case 'set_songs_loading':
       return {
         ...state,
-        loadingSongs: true,
+        all: [],
+        isLoading: action.isLoading,
       };
     case 'get_songs_success':
       return {
         ...state,
-        // globalStats: action.payload,
-        loadingSongs: false,
+        all: action.data,
+        pagination: action.pagination,
+        isLoading: false,
       };
     case 'get_songs_fail':
       return {
         ...state,
-        // globalStats: action.payload,
-        loadingSongs: false,
+        isLoading: false,
+      };
+    case 'set_query':
+      return {
+        ...state,
+        query: action.query,
       };
     default:
       return state;
